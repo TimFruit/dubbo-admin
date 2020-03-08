@@ -29,7 +29,7 @@ import org.apache.dubbo.admin.model.dto.ServiceDetailDTO;
 import org.apache.dubbo.admin.service.ConsumerService;
 import org.apache.dubbo.admin.service.ProviderService;
 import org.apache.dubbo.metadata.definition.model.FullServiceDefinition;
-import org.apache.dubbo.metadata.identifier.MetadataIdentifier;
+import org.apache.dubbo.metadata.report.identifier.MetadataIdentifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -92,6 +92,9 @@ public class ServiceController {
         if (providers != null && providers.size() > 0) {
             application = providers.get(0).getApplication();
         }
+        //fixme MetadataIdentifier identifier = new MetadataIdentifier(interfaze, version, group, Constants.PROVIDER_SIDE, application);
+        // 这里MetadataIdentifier构造参数的定义和dubbo 2.7.5 org.apache.dubbo.metadata.store.RemoteWritableMetadataService#publishServiceDefinition()方法中的不太一样
+        // 导致dubbo2.7.5设置的元数据路径不一样， 从而查询不了元数据
         MetadataIdentifier identifier = new MetadataIdentifier(interfaze, version, group, Constants.PROVIDER_SIDE, application);
         String metadata = providerService.getProviderMetaData(identifier);
         ServiceDetailDTO serviceDetailDTO = new ServiceDetailDTO();
